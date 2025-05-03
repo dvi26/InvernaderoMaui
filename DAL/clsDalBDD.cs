@@ -25,7 +25,7 @@ namespace DAL
             try
             {
                 miConexion = clsConexion.getConexion();
-                miComando.CommandText = "SELECT IdInvernadero, Nombre FROM clsInvernadero";
+                miComando.CommandText = "SELECT IdInvernadero, Nombre FROM clsInvernadero"; 
                 miComando.Connection = miConexion;
                 miLector = miComando.ExecuteReader();
 
@@ -33,7 +33,7 @@ namespace DAL
                 {
                     while (miLector.Read())
                     {
-                        int id = (int)miLector["Id"];
+                        int id = (int)miLector["IdInvernadero"];
                         string nombre = miLector["Nombre"] != DBNull.Value ? (string)miLector["Nombre"] : "";
 
                         oInvernadero = new clsInvernadero(id, nombre);
@@ -51,6 +51,5 @@ namespace DAL
 
             return listadoInvernaderos;
         }
-
     }
 }

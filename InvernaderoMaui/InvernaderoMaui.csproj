@@ -64,6 +64,11 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <ProjectReference Include="..\DAL\DAL.csproj" />
+	  <ProjectReference Include="..\ENT\ENT.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
 	  <MauiXaml Update="Views\vistaDetalles.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>

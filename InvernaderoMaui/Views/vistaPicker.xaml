@@ -2,11 +2,24 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="InvernaderoMaui.Views.vistaPicker"
-             Title="vistaPicker">
-    <VerticalStackLayout>
-        <Label 
-            Text="Welcome to .NET MAUI!"
-            VerticalOptions="Center" 
-            HorizontalOptions="Center" />
+             xmlns:vm="clr-namespace:InvernaderoMaui.Views"
+             Title="">
+
+    <ContentPage.BindingContext>
+        <vm:clsVMInvernaderoFecha />
+    </ContentPage.BindingContext>
+
+    <VerticalStackLayout Padding="20" Spacing="25">
+
+        <Label Text="Selecciona un invernadero:" FontAttributes="Bold"/>
+        <Picker ItemsSource="{Binding ListadoInvernaderos }" 
+                ItemDisplayBinding="{Binding Nombre}" 
+                SelectedItem="{Binding InvernaderoSeleccionado}" />
+
+        <Label Text="Selecciona una fecha:" FontAttributes="Bold"/>
+        <DatePicker Date="{Binding FechaSeleccionada}" />
+
+        <Button Text="Ver detalles" Command="{Binding CambiarVistaCommand}" />
+
     </VerticalStackLayout>
 </ContentPage>
