@@ -1,12 +1,44 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="InvernaderoMaui.Views.vistaDetalles"
-             Title="vistaDetalles">
-    <VerticalStackLayout>
-        <Label 
-            Text="Welcome to .NET MAUI!"
-            VerticalOptions="Center" 
-            HorizontalOptions="Center" />
-    </VerticalStackLayout>
+<ContentPage
+    x:Class="InvernaderoMaui.Views.vistaDetalles"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    Title="Detalles del Invernadero" xmlns:vm="clr-namespace:InvernaderoMaui.Views">
+    
+    <ContentPage.BindingContext>
+        <vm:clsViewModelVistaDetalles />
+    </ContentPage.BindingContext>
+
+
+    <ScrollView>
+        <VerticalStackLayout Padding="20" Spacing="20">
+            <Label Text="{Binding NombreInvernadero}" FontAttributes="Bold" FontSize="20" />
+            <Label Text="{Binding FechaSeleccionada, StringFormat='Fecha: {0:dd/MM/yyyy}'}" FontAttributes="Bold" FontSize="20" />
+            
+            <Label Text="Temperaturas" FontAttributes="Bold" FontSize="20" />
+
+            <Label Text="{Binding Temp1Label, StringFormat='Temperatura 1: {0}°C'}"/>
+            <ProgressBar Progress="{Binding ProgressTemp1}" />
+
+            <Label Text="{Binding Temp2Label, StringFormat='Temperatura 2: {0}°C'}"/>
+            <ProgressBar Progress="{Binding ProgressTemp2}" />
+
+            <Label Text="{Binding Temp3Label, StringFormat='Temperatura 3: {0}°C'}"/>
+            <ProgressBar Progress="{Binding ProgressTemp3}" />
+
+            <Label Text="Humedades" FontAttributes="Bold" FontSize="20" />
+
+            <Label Text="{Binding Humedad1Label, StringFormat='Humedad 1: {0}%'}"/>
+            <ProgressBar Progress="{Binding ProgressHumedad1}" />
+
+            <Label Text="{Binding Humedad2Label, StringFormat='Humedad 2: {0}%'}"/>
+            <ProgressBar Progress="{Binding ProgressHumedad2}" />
+
+            <Label Text="{Binding Humedad3Label, StringFormat='Humedad 3: {0}%'}"/>
+            <ProgressBar Progress="{Binding ProgressHumedad3}" />
+
+            <Button Text="Regresar" Command="{Binding VolverCommand}" />
+
+        </VerticalStackLayout>
+    </ScrollView>
 </ContentPage>

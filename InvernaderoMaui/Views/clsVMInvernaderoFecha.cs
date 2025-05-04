@@ -1,34 +1,34 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
 using ApiMaui.Resources;
 using DAL;
 using ENT;
 using InvernaderoMaui.Models;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
-
-//using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using Microsoft.Data.SqlClient;
 using Microsoft.Maui.Controls;
 
 namespace InvernaderoMaui.Views
 {
+
     public class clsVMInvernaderoFecha : INotifyPropertyChanged
     {
+        #region Atributos 
         private List<clsInvernadero> listadoInvernaderos;
         private clsVMInvernaderoFecha invernaderoFecha;
         private clsInvernadero invernaderoSeleccionado;
         private DelegateCommand cambiarVistaCommand;
         private DateTime fechaSeleccionada;
+        #endregion
 
+        #region Propiedades
         public clsInvernadero InvernaderoSeleccionado
         {
             get { return invernaderoSeleccionado; }
-            set {
+            set
+            {
                 if (invernaderoSeleccionado != value)
                 {
                     invernaderoSeleccionado = value;
@@ -37,6 +37,7 @@ namespace InvernaderoMaui.Views
                 }
             }
         }
+
         public DateTime FechaSeleccionada
         {
             get { return fechaSeleccionada; }
@@ -46,57 +47,98 @@ namespace InvernaderoMaui.Views
                 {
                     fechaSeleccionada = value;
                     NotifyPropertyChanged();
-                    
                 }
             }
         }
+
         public List<clsInvernadero> ListadoInvernaderos
         {
             get { return listadoInvernaderos; }
             private set { listadoInvernaderos = value; }
         }
+
         public clsVMInvernaderoFecha InvernaderoFecha
         {
             get { return invernaderoFecha; }
             set { invernaderoFecha = value; }
         }
+
         public DelegateCommand CambiarVistaCommand
         {
             get { return cambiarVistaCommand; }
         }
+        #endregion
+
+        #region Constructor
+
         public clsVMInvernaderoFecha()
         {
-            ListadoInvernaderos = clsDalBDD.getInvernaderos();
+            try
+            {
+                ListadoInvernaderos = clsDalBDD.getInvernaderos();
+            }
+            catch (SqlException ex)
+            {
+                App.Current.MainPage.DisplayAlert("Error", "Error al cargar los invernaderos", "OK");
+            }
+            
             FechaSeleccionada = DateTime.Now;
             cambiarVistaCommand = new DelegateCommand(cambiarVistaCommandExecuted, cambiarVistaCommandCanExecute);
-        } 
+        }
+        #endregion
+
+        #region Métodos
+        /// <summary>
+        /// Ejecuta el comando para cambiar la vista, pasandole los parametros necesarios (Nombre, IdInvernadero y FechaSeleccionada). Si no existe un invernadero con esa fecha, muestra error.
+        /// </summary>
         private async void cambiarVistaCommandExecuted()
         {
-            //creo que no hace falta comprobar, ya que lo comprueba en el CanExecute
-            if (InvernaderoSeleccionado != null)
+            /// Verifica si existe un invernadero con la fecha seleccionada, quizas podria haberlo hecho con la funcion getTemperaturas.
+            bool existeFecha = false;
+            try
             {
-                var invernaderoConFecha = new clsInvernaderoConFecha{
+                existeFecha = clsDalBDD.existeFechaEnInvernadero(InvernaderoSeleccionado.IdInvernadero, FechaSeleccionada);
+            }
+            catch (SqlException ex)
+            {
+                await App.Current.MainPage.DisplayAlert("Error", "Error al verificar la fecha", "OK");
+            }
+                
+            if (existeFecha)
+            {
+                var invernaderoConFecha = new clsInvernaderoConFecha
+                {
                     Invernadero = InvernaderoSeleccionado,
                     FechaSeleccionada = FechaSeleccionada
                 };
 
-                var navigationParameter = new ShellNavigationQueryParameters{
-            { "InvernaderoId", InvernaderoSeleccionado.IdInvernadero.ToString() },
-            { "FechaSeleccionada", FechaSeleccionada.ToString("yyyy-MM-dd") }};
+                var navigationParameter = new ShellNavigationQueryParameters
+                {
+                    { "Nombre", InvernaderoSeleccionado.Nombre },
+                    { "IdInvernadero", InvernaderoSeleccionado.IdInvernadero.ToString() },
+                    { "FechaSeleccionada", FechaSeleccionada.ToString("yyyy-MM-dd") }
+                };
 
-                await Shell.Current.GoToAsync($"///vistaDetalles", navigationParameter);
+                await Shell.Current.GoToAsync("//vistaDetalles", navigationParameter);
+            }
+            else
+            {
+                await App.Current.MainPage.DisplayAlert("Error", "No existe un invernadero con esa fecha", "OK");
             }
         }
+
+        /// <summary>
+        /// Verifica si el comando de cambiar vista puede ejecutarse. 
+        /// El comando solo se puede ejecutar si hay un invernadero seleccionado.
+        /// </summary>
         private bool cambiarVistaCommandCanExecute()
         {
-            bool res=false;
-            if (InvernaderoSeleccionado != null)
-            {
-                return true;
-            }
-            return res;
+            return InvernaderoSeleccionado != null;
         }
-        #region notify
+        #endregion
+
+        #region INotifyPropertyChanged
+
         public event PropertyChangedEventHandler PropertyChanged;
 
         private void NotifyPropertyChanged([CallerMemberName] string propertyName = "")
