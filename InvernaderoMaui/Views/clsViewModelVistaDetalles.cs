@@ -303,6 +303,7 @@ namespace InvernaderoMaui.Views
             await Shell.Current.GoToAsync("//vistaPicker");
         }
         #endregion
+
         #region INotifyPropertyChanged
         public event PropertyChangedEventHandler PropertyChanged;
 

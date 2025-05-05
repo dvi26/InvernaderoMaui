@@ -17,7 +17,7 @@ namespace InvernaderoMaui.Views
     {
         #region Atributos 
         private List<clsInvernadero> listadoInvernaderos;
-        private clsVMInvernaderoFecha invernaderoFecha;
+        //private clsVMInvernaderoFecha invernaderoFecha;
         private clsInvernadero invernaderoSeleccionado;
         private DelegateCommand cambiarVistaCommand;
         private DateTime fechaSeleccionada;
@@ -32,7 +32,7 @@ namespace InvernaderoMaui.Views
                 if (invernaderoSeleccionado != value)
                 {
                     invernaderoSeleccionado = value;
-                    NotifyPropertyChanged("InvernaderoSeleccionado");
+                    //NotifyPropertyChanged("InvernaderoSeleccionado");
                     cambiarVistaCommand.RaiseCanExecuteChanged();
                 }
             }
@@ -56,12 +56,12 @@ namespace InvernaderoMaui.Views
             get { return listadoInvernaderos; }
             private set { listadoInvernaderos = value; }
         }
-
+        /*
         public clsVMInvernaderoFecha InvernaderoFecha
         {
             get { return invernaderoFecha; }
             set { invernaderoFecha = value; }
-        }
+        }*/
 
         public DelegateCommand CambiarVistaCommand
         {
@@ -106,11 +106,13 @@ namespace InvernaderoMaui.Views
                 
             if (existeFecha)
             {
+                
+                /*
                 var invernaderoConFecha = new clsInvernaderoConFecha
                 {
                     Invernadero = InvernaderoSeleccionado,
                     FechaSeleccionada = FechaSeleccionada
-                };
+                };*/
 
                 var navigationParameter = new ShellNavigationQueryParameters
                 {

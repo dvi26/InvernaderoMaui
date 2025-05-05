@@ -7,6 +7,7 @@ using ENT;
 
 namespace InvernaderoMaui.Models
 {
+    //Posible modelo/DTO, no me ha hecho falta
     public class clsInvernaderoConFecha
     {
         public clsInvernadero Invernadero { get; set; } 
